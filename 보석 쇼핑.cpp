@@ -28,3 +28,39 @@ vector<int> solution(vector<string> gems) {
 
 
  */
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<int> solution(vector<string> gems) {
+    vector<int> answer(2);
+    unordered_set<string> st(gems.begin(), gems.end());
+    unordered_map<string, int> ump;
+    int l = 0; int r = 0;
+    for(auto g : gems){
+        ump[g]++;
+        if(ump.size() == st.size()) break;
+        ++r;
+    }
+    int min_len = r - l;
+    answer[0] = l + 1; answer[1] = r + 1;
+    while(r < gems.size()){
+        string s = gems[l];
+        ump[gems[l]]--; l++;
+        if(ump[s] == 0){
+            ++r;
+            for(;r < gems.size() ; r++){
+                ump[gems[r]]++;
+                if(gems[r] == s) break; 
+            }
+            if(r == gems.size()) break;
+        }
+        if(min_len > r - l){
+            answer[0] = l + 1;
+            answer[1] = r + 1;
+            min_len = r - l;
+        }
+    }
+    return answer;
+}
